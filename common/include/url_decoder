@@ -1,0 +1,12 @@
+#ifndef __$__WEB_SOCKET_SERVER_URLDECODER__2024_
+#define __$__WEB_SOCKET_SERVER_URLDECODER__2024_
+namespace wss
+{
+class URLDecoder
+{
+public:
+static const char * decode(const char *);
+};
+}
+#endif
+

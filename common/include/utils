@@ -1,0 +1,12 @@
+// requirement in Oct 2020
+#ifndef __$__WEB_SOCKET_SERVER_UTILS__2024_
+#define __$__WEB_SOCKET_SERVER_UTILS__2024_
+#include<iostream>
+#include<cstring>
+using namespace std;
+namespace wss
+{
+bool extensionEquals(const char *,const char *);
+char isClientSideResource(const char *);
+}
+#endif

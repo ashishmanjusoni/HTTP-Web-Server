@@ -1,0 +1,13 @@
+#ifndef __$__WEB_SOCKET_SERVER_URLFORMATTER__2024_
+#define __$__WEB_SOCKET_SERVER_URLFORMATTER__2024_
+namespace wss
+{
+class URLFormatter
+{
+public:
+static const char * encode(const char *);
+static const char * decode(const char *);
+};
+}
+#endif
+

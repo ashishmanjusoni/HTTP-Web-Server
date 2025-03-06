@@ -1,0 +1,28 @@
+#ifndef __$__MIME_TYPE__2024_
+#define __$__MIME_TYPE__2024_
+#include<iostream>
+using namespace std;
+namespace wss
+{
+class MIMEType
+{
+private:
+MIMEType();
+MIMEType(const MIMEType&)=delete;
+MIMEType & operator=(const MIMEType &)=delete;
+public:
+static string TEXT_HTML;
+static string TEXT_CSS;
+static string TEXT_CSV;
+static string TEXT_JAVASCRIPT;
+static string TEXT_PLAIN;
+static string APPLICATION_PDF;
+static string APPLICATION_JSON;
+static string IMAGE_PNG;
+static string IMAGE_JPEG;
+static string IMAGE_ICO;
+static bool contains(const string &);
+static string getMIMEType(const string &);
+};
+}
+#endif

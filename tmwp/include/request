@@ -1,0 +1,52 @@
+#ifndef __$__REQUEST__2024_
+#define __$__REQUEST__2024_
+#include<iostream>
+#include<mime_type>
+#include<map>
+using namespace std;
+namespace wss
+{
+class Request
+{
+private:
+int socketDescriptor;
+int port;
+string host;
+string mimeType;
+string method; // GET(3),POST(4),PUT(3),DELETE(6),HEAD(4),OPTIONS(7),PATCH(5),CONNECT(7),TRACE(5)
+string resource; // starts from '/' /api , /pqr.css, /
+char clientSideResource;
+map<string,string> inputData; 
+map<string,int> int_map;
+//string request_forward;
+//bool is_request_forward;
+//char client_side_forward_resource;
+string forwardTo;
+void parseGETResource(const char *);
+public:
+Request();
+Request & operator=(const Request &)=delete;
+~Request();
+void setInt(string,int);
+int getInt(string);
+void setPort(int);
+void setSocketDescriptor(int);
+void setMimeType(const string);
+string getMimeType();
+void setMethod(const string);
+string getMethod();
+void setResource(const string);
+string getResource();
+void setClientSideResource(char);
+char getClientSideResource();
+bool containsKey(string key);
+void add(string key,string value);
+string get(string key);
+static Request parseRequest(const char *);
+void forward(string);
+string getRequestForwardTo();
+//bool getIsRequestForward();
+//char getClientSideForwardResource();
+};
+}
+#endif

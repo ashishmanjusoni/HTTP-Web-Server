@@ -1,0 +1,35 @@
+// requirement in Oct 2020
+#ifndef __$__WEB_SOCKET_SERVER__2024_
+#define __$__WEB_SOCKET_SERVER__2024_
+#include<map>
+#include<iostream>
+#include<request>
+#include<response>
+using namespace std;
+namespace wss
+{
+class WebServer
+{
+private:
+map<string,void (*)(Request &,Response &)> config;
+map<int,void (*)(Request &,Response &)> error_config;
+int port;
+char isClientSideResource(const char *);
+pair<string,map<string,string>> parseResource(const char *);
+Request parseRequest(const char *);
+void readClientSideResource(Request &,Response &);
+//void sendResponse(int,Response &);
+public:
+WebServer(int);
+WebServer(const WebServer &)=delete;
+WebServer & operator=(const WebServer &)=delete;
+WebServer(const WebServer &&)=delete;
+~WebServer();
+void error404(void (*)(Request &,Response &));
+void error500(void (*)(Request &,Response &));
+void onRequest(string,void (*)(Request &,Response &));
+void sendNotFound(Request &, Response &);
+void start();
+};
+}
+#endif

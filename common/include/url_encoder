@@ -1,0 +1,12 @@
+#ifndef __$__WEB_SOCKET_SERVER_URLENCODER__2024_
+#define __$__WEB_SOCKET_SERVER_URLENCODER__2024_
+namespace wss
+{
+class URLEncoder
+{
+public:
+static const char * encode(const char *);
+};
+}
+#endif
+
