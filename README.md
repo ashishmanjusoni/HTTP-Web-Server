@@ -23,30 +23,30 @@ sends back the basic HTTP Response.
 * C++
 * HTML
 
-## Programming Languages
-* C++
-* HTML
-
 ## Project Directory
 
 * **common/include** : contains header files of the utilities
   
-            * mime_type
-            * url_encoder
-            * url_decoder
-            * utils
+	* mime_type
+        * url_encoder
+        * url_decoder
+        * utils
 
 * **common/src** : contains implementation of the above header files
 
-            * mime_type.cpp
-            * url_encoder.cpp
-            * url_decoder.cpp
-            * utils.cpp
+        * mime_type.cpp
+        * url_encoder.cpp
+        * url_decoder.cpp
+        * utils.cpp
 
 * **server/include** : this directory contains three major header files
   
-            * http_linux_tcp_server
-            * http_request
-            * http_response
+        * http_linux_tcp_server
+        * http_request
+        * http_response
 
 * **server/src** : this directory contains implementation part of the above head file
+
+	* http_linux_tcp_server.cpp
+	* http_request.cpp
+	* http_response.cpp
