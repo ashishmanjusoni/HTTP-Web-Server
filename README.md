@@ -1,4 +1,4 @@
-# HTTP-Web-Server
+## What is an HTTP-Web-Server?
 `HTTP Protocol` Hypertext Transfer Protocol (HTTP) is an protocol for transmitting hypermedia documents. It was designed for communication between web browser and web server.
 
 `HTTP Web Server` whenever a browser needs a file that is hosted on a web server, the browser requests the file via HTTP. When the request reaches the correct (hardware)web server, the (software) HTTP server accepts the request, finds the requested document, and sends it back to the browser, also through HTTP. (If the server doesn't find the requested document, it returns a 404 response instead.) 
@@ -13,3 +13,40 @@ A web client, for example, a web browser, sends an HTTP request to a web server 
 
 The response sent by the HTTP server may also include data from files (for example, HTML documents) stored on the webserver.
 
+## About Project
+
+This is mini project which shows one of the ways in which the HTTP servers are implemented. It uses TCP socket to listen the incomming request and 
+sends back the basic HTTP Response. 
+
+## Programming Languages
+* C
+* C++
+* HTML
+
+## Programming Languages
+* C++
+* HTML
+
+## Project Directory
+
+* **common/include** : contains header files of the utilities
+  
+            * mime_type
+            * url_encoder
+            * url_decoder
+            * utils
+
+* **common/src** : contains implementation of the above header files
+
+            * mime_type.cpp
+            * url_encoder.cpp
+            * url_decoder.cpp
+            * utils.cpp
+
+* **server/include** : this directory contains three major header files
+  
+            * http_linux_tcp_server
+            * http_request
+            * http_response
+
+* **server/src** : this directory contains implementation part of the above head file
