@@ -65,3 +65,6 @@ g++ -c -Wall -Werror -fPIC -I ../include -I ../../common/include http_linux_tcp_
 
 g++ -shared -o ../lib/libhttplinuxtcpserver.so *.o
 
+## Run Server
+
+Please go through the script file `app/run_server.sh`
