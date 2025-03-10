@@ -4,35 +4,35 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<unistd.h>
-#include<request>
-#include<response>
-#include<web_server>
+#include<http_request>
+#include<http_response>
+#include<http_linux_tcp_server>
 #include<utils>
 using namespace std;
 using namespace wss;
-WebServer::WebServer(int port)
+LinuxTCPServer::LinuxTCPServer(int port)
 {
 this->port=port;
 }
-WebServer::~WebServer()
+LinuxTCPServer::~LinuxTCPServer()
 {
 }
 
-void WebServer::error404(void (*_error404)(Request &,Response &))
+void LinuxTCPServer::error404(void (*_error404)(Request &,Response &))
 {
 if(!_error404) return;
 this->error_config.insert(pair<int,void(*)(Request &,Response &)>(404,_error404));
 }
-void WebServer::error500(void (*_error500)(Request &,Response &))
+void LinuxTCPServer::error500(void (*_error500)(Request &,Response &))
 {
 if(!_error500) return;
 this->error_config.insert(pair<int,void(*)(Request &,Response &)>(500,_error500));
 }
-void WebServer::onRequest(string resource,void (*p2p)(Request &,Response &))
+void LinuxTCPServer::onRequest(string resource,void (*p2p)(Request &,Response &))
 {
 config.insert(pair<string,void (*)(Request &,Response&)>(resource,p2p));
 }
-void WebServer::sendNotFound(Request &request, Response &response)
+void LinuxTCPServer::sendNotFound(Request &request, Response &response)
 {
 map<int,void(*)(Request &,Response &)>::iterator itr=this->error_config.find(404);
 if(itr!=this->error_config.end()) 
@@ -42,7 +42,7 @@ _error404(request,response);
 }
 }
 
-void WebServer::readClientSideResource(Request &request,Response &response)
+void LinuxTCPServer::readClientSideResource(Request &request,Response &response)
 {
 FILE *file;
 int size;
@@ -88,19 +88,7 @@ fclose(file);
 cout<<"Read Client Side Resource"<<endl;
 }
 
-// private method
-/*
-void WebServer::sendResponse(int clientSocketDescriptor,Response &response)
-{
-forward_list<const char *> content_list=response.getContent();
-for(forward_list<const char *>::iterator itr=content_list.begin();itr!=content_list.end();++itr)
-{
-send(clientSocketDescriptor,*itr,strlen(*itr),0);
-}
-}
-*/
-
-void WebServer::start()
+void LinuxTCPServer::start()
 {
 int serverSocketDescriptor,clientSocketDescriptor;
 struct sockaddr_in serverSocketInformation,clientSocketInformation;
@@ -185,8 +173,6 @@ cout<<"Server Side resource send"<<endl;
 }
 }
 }// forward request infinite loop ends
-//sendResponse(clientSocketDescriptor,response);
-//close(clientSocketDescriptor);
 response._close();
 cout<<"Close connection"<<endl;
 //end of infinite loop

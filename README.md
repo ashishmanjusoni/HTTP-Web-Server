@@ -50,3 +50,18 @@ sends back the basic HTTP Response.
         * http_linux_tcp_server.cpp
         * http_request.cpp
         * http_response.cpp
+
+## Compilation
+
+`compile all (.cpp) files and generates the .o (object file) files in same working directory i.e (/src)`
+
+g++ -c -Wall -Werror -fPIC -I ../include -I ../../common/include http_request.cpp -o http_request.o
+
+g++ -c -Wall -Werror -fPIC -I ../include -I ../../common/include http_response.cpp -o http_response.o
+
+g++ -c -Wall -Werror -fPIC -I ../include -I ../../common/include http_linux_tcp_server.cpp -o http_linux_tcp_server.o
+
+`Using those object files will create a shared library (.so) in (/lib) directory`
+
+g++ -shared -o ../lib/libhttplinuxtcpserver.so *.o
+

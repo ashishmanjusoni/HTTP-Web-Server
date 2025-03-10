@@ -1,5 +1,5 @@
-#include<url_formatter>
-#include<request>
+#include<url_decoder>
+#include<http_request>
 #include<mime_type>
 #include<cstring>
 #include<iostream>
@@ -111,7 +111,7 @@ e++;
 if(!*e) return;
 e++;
 if(!*e) return;
-const char * decodeUrl=URLFormatter::decode(e);
+const char * decodeUrl=URLDecoder::decode(e);
 e=decodeUrl;
 while(*e)
 {

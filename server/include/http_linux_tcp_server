@@ -3,12 +3,12 @@
 #define __$__WEB_SOCKET_SERVER__2024_
 #include<map>
 #include<iostream>
-#include<request>
-#include<response>
+#include<http_request>
+#include<http_response>
 using namespace std;
 namespace wss
 {
-class WebServer
+class LinuxTCPServer
 {
 private:
 map<string,void (*)(Request &,Response &)> config;
@@ -20,11 +20,11 @@ Request parseRequest(const char *);
 void readClientSideResource(Request &,Response &);
 //void sendResponse(int,Response &);
 public:
-WebServer(int);
-WebServer(const WebServer &)=delete;
-WebServer & operator=(const WebServer &)=delete;
-WebServer(const WebServer &&)=delete;
-~WebServer();
+LinuxTCPServer(int);
+LinuxTCPServer(const LinuxTCPServer &)=delete;
+LinuxTCPServer & operator=(const LinuxTCPServer &)=delete;
+LinuxTCPServer(const LinuxTCPServer &&)=delete;
+~LinuxTCPServer();
 void error404(void (*)(Request &,Response &));
 void error500(void (*)(Request &,Response &));
 void onRequest(string,void (*)(Request &,Response &));
