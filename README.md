@@ -26,9 +26,9 @@ sends back the basic HTTP Response.
 ## Project Directory
 
 * **common/include** : contains header files of the utilities
-  
+        
 	* mime_type
-        * url_encoder
+	* url_encoder
         * url_decoder
         * utils
 
