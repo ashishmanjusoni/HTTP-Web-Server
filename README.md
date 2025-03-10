@@ -26,12 +26,12 @@ sends back the basic HTTP Response.
 ## Project Directory
 
 * **common/include** : contains header files of the utilities
-        
-	* mime_type
-	* url_encoder
-        * url_decoder
-        * utils
 
+        * mime_type
+        * url_encoder
+        * url_decoder
+        * utils.cpp
+      
 * **common/src** : contains implementation of the above header files
 
         * mime_type.cpp
