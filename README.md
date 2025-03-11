@@ -16,7 +16,7 @@ The response sent by the HTTP server may also include data from files (for examp
 ## About Project
 
 This is mini project which shows one of the ways in which the HTTP servers are implemented. It uses TCP socket to listen the incomming request and 
-sends back the basic HTTP Response. 
+sends back the basic HTTP Response.
 
 ## Programming Languages
 * C
@@ -51,6 +51,13 @@ sends back the basic HTTP Response.
         * http_request.cpp
         * http_response.cpp
 
+
+## Project Description
+
+* The `server/include/http_linux_tcp_server.h` and `server/src/http_linux_tcp_server.cpp` will hold the actual implementation of the server via `LinuxTCPServer` class. 
+* `app/myapp.cpp` will have `main` function through which we will run the server using `LinuxTCPServer server(8181);`
+* Through `server.onRequest(string,void(*)(Request &,Response &)` one can provide one or many server side resource
+
 ## Compilation
 
 Please go through the script file `server/src/compile_files.sh`
@@ -58,3 +65,11 @@ Please go through the script file `server/src/compile_files.sh`
 ## Run Server
 
 Please go through the script file `app/run_server.sh`
+
+
+
+
+The application programmer when creating an instance of the HTTP Linux TCP server provide port as an constructor argument.
+
+`LinuxTCPServer server(8181);`
+

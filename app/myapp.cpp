@@ -1,9 +1,9 @@
 #include<cstring>
 #include<fstream>
 #include<iostream>
-#include<request>
-#include<response>
-#include<web_server>
+#include<http_request>
+#include<http_response>
+#include<http_linux_tcp_server>
 #include<mime_type>
 using namespace std;
 using namespace wss;
@@ -39,7 +39,6 @@ response.write(responseBuffer);
 }
 size-=1024;
 }
-//response.closeSocket();
 cout<<"Send 404"<<endl;
 fclose(file);
 }
@@ -74,7 +73,6 @@ response.write(responseBuffer);
 }
 size-=1024;
 }
-//response.closeSocket();
 fclose(file);
 }
 
@@ -109,7 +107,7 @@ request.forward("getCityViewByCode");
 void getCityViewByCode(Request &request,Response &response)
 {
 int code=request.getInt("code");
-if(code==1) request.forward("ujjain123123123123123123123123123123123123.html");
+if(code==1) request.forward("ujjain.html");
 else if(code==2) request.forward("indore.html");
 else if(code==3) request.forward("dewas.html");
 else request.forward("index.html");
@@ -117,7 +115,7 @@ else request.forward("index.html");
 
 int main(void)
 {
-WebServer webServer(7171);
+LinuxTCPServer webServer(7171);
 webServer.error404(send404);
 webServer.onRequest("/",indexPage);
 webServer.onRequest("/now",getDispatchTime);
