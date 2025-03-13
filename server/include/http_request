@@ -6,21 +6,22 @@
 using namespace std;
 namespace wss
 {
+/*
+	This class is responsible to store information about the incoming request from the client
+	It contains the port number, host, http_method, resource(request_mapping), data structure for request inputs.
+*/
 class Request
 {
 private:
 int socketDescriptor;
 int port;
 string host;
-string mimeType;
-string method; // GET(3),POST(4),PUT(3),DELETE(6),HEAD(4),OPTIONS(7),PATCH(5),CONNECT(7),TRACE(5)
+string mimeType; // text/html, plain/text
+string method; // GET,POST,PUT,DELETE,HEAD,OPTIONS,PATCH,CONNECT,TRACE
 string resource; // starts from '/' /api , /pqr.css, /
 char clientSideResource;
 map<string,string> inputData; 
 map<string,int> int_map;
-//string request_forward;
-//bool is_request_forward;
-//char client_side_forward_resource;
 string forwardTo;
 void parseGETResource(const char *);
 public:
@@ -29,24 +30,65 @@ Request & operator=(const Request &)=delete;
 ~Request();
 void setInt(string,int);
 int getInt(string);
+
+/* 
+	It is same port on which the server is in listen mode 
+*/
 void setPort(int);
+
+/* 
+	Whenever socket accepts a request, it will create new socket descriptor to handle a particulare request
+	Every new request has its own socket descriptor id
+*/
 void setSocketDescriptor(int);
+
+/* 
+	When parse the request through parseRequest method we will get this information
+	setter method to set MIME Type on the request, check list of MIME Type in common/src/mime_type.cpp  
+*/
 void setMimeType(const string);
+
+// getter method to get the MIME Type of the request
 string getMimeType();
+
+/* 
+	When parse the request through parseRequest method we will get this information
+	setter method to set HTTP Method on the request, as of now we handle only GET method 
+*/
 void setMethod(const string);
+// getter method to get http_method of the request
 string getMethod();
+/* 
+	When parse the request through parseRequest method we will get this information
+	resource is the request mapping for example /xyz/abc 
+*/
 void setResource(const string);
+// getter method to get resource of the request
 string getResource();
+/* 
+	If request requires to execute the client side resource ( read HTML file and send back to client in response) 
+*/
 void setClientSideResource(char);
 char getClientSideResource();
 bool containsKey(string key);
+/* 
+	add each and every input into the specified data structure 
+*/
 void add(string key,string value);
+/* 
+	get input value through input key from specified data structure 
+*/
 string get(string key);
+/* 
+	Parse request to fetch resource details and query parameters and
+	also decides weather the request wants to execute the client side resource or server side resource 
+*/
 static Request parseRequest(const char *);
+/* 
+	If request needs to forward to another resource 
+*/
 void forward(string);
 string getRequestForwardTo();
-//bool getIsRequestForward();
-//char getClientSideForwardResource();
 };
 }
 #endif
