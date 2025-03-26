@@ -90,9 +90,9 @@ this->inputData.insert(pair<string,string>(key,value));
 }
 string Request::get(string key)
 {
-if(key.empty() || this->inputData.empty()) return "";
+if(key.empty() || this->inputData.empty()) return string("");
 map<string,string>::iterator itr=this->inputData.find(key);
-if(itr==this->inputData.end()) return "";
+if(itr==this->inputData.end()) return string("");
 return itr->second;
 }
 
