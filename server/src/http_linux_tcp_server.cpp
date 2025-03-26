@@ -163,7 +163,6 @@ cout<<"Server Side resource"<<endl;
 void (*_resource)(Request &,Response&);
 _resource=itr->second;
 _resource(request,response);
-if(response.getStatus()!=200) // something went wrong
 if(!request.getRequestForwardTo().empty())
 {
 request.setResource(request.getRequestForwardTo());

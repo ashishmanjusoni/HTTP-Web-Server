@@ -1,5 +1,6 @@
 #ifndef __$__RESPONSE__2024_
 #define __$__RESPONSE__2024_
+#include<map>
 #include<iostream>
 #include<forward_list>
 using namespace std;
@@ -8,19 +9,19 @@ namespace wss
 class Response
 {
 private:
-//forward_list<const char *> content_list;
-//forward_list<const char *>::iterator itr;
 int clientSocketDescriptor;
 bool is_closed;
+map<string,string> parameters;
 public:
 Response(int);
 Response(const Response &)=delete;
 Response & operator=(const Response &)=delete;
 ~Response();
-void write(const string&);
+void addParameters(string,string);
+string getParameters(string);
+void write(string);
 void write(const char *);
 void _close();
-//forward_list<const char *> getContent();
 };
 }
 #endif
