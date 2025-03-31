@@ -67,6 +67,7 @@ void Request::setResource(const string resource)
 {
 this->resource=resource;
 this->clientSideResource=isClientSideResource(resource.c_str());
+if(!this->forwardTo.empty()) this->forwardTo=string("");
 }
 string Request::getResource()
 {

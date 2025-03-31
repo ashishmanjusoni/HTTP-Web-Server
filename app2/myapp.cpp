@@ -8,6 +8,16 @@
 using namespace std;
 using namespace wss;
 
+struct marks
+{
+int rollnumber;
+int hindi;
+int physics;
+int chemistry;
+int maths;
+int english;
+};
+
 void send404(Request &request,Response &response)
 {
 char responseBuffer[1026],headerBuffer[8192];
@@ -39,8 +49,8 @@ response.write(responseBuffer);
 }
 size-=1024;
 }
-cout<<"Send 404"<<endl;
 response._close();
+cout<<"Send 404"<<endl;
 fclose(file);
 }
 
@@ -78,55 +88,80 @@ response._close();
 fclose(file);
 }
 
-void getDispatchTime(Request &request, Response &response)
+void getMarksheet(Request &request,Response &response)
 {
-time_t now;
-time(&now);
-char *t=ctime(&now);
+struct marks m;
+FILE *file;
+file=fopen("marks.data","rb");
+int rollnumber=atoi(request.get("rollnumber").c_str());
+while(1)
+{
+fread(&m,sizeof(m),1,file);
+if(feof(file)) break;
+if(m.rollnumber==rollnumber)
+{
+request.setInt("hindi",m.hindi);
+request.setInt("english",m.english);
+request.setInt("physics",m.physics);
+request.setInt("chemistry",m.chemistry);
+request.setInt("maths",m.maths);
+request.forward("marksheet.sct");
+break;
+}
+}
+fclose(file);
+}
+
+void getMarksheetForm(Request &request,Response &response)
+{
+char tmp[11];
+int h=request.getInt("hindi");
+int e=request.getInt("english");
+int p=request.getInt("physics");
+int c=request.getInt("chemistry");
+int m=request.getInt("maths");
+FILE *file;
+char g;
+string str;
+file=fopen("marksheet.sct","r");
+fseek(file,0,SEEK_END);
+int size=ftell(file);
+fseek(file,0,SEEK_SET);
 response.write("HTTP/1.1 200 OK\nContent-Type: ");
-response.write(MIMEType::TEXT_PLAIN);
+response.write(MIMEType::TEXT_HTML);
 response.write("\n\n");
-response.write(t);
+response.addParameters("hindi",to_string(h));
+response.addParameters("english",to_string(e));
+response.addParameters("physics",to_string(p));
+response.addParameters("chemistry",to_string(c));
+response.addParameters("maths",to_string(m));
+while(1)
+{
+g=fgetc(file);
+if(feof(file)) 
+{
+if(str.empty()) break;
+response.write(str);
+break;
+}
+str.push_back(g);
+if(g=='\n')
+{
+response.write(str);
+str.clear();
+}
+}
 response._close();
-}
-
-/*
-void getCityView(Request &request,Response &response)
-{
-int cityCode=atoi(request.get("cityCode").c_str());
-if(cityCode==1) request.forward("ujjain.html");
-else if(cityCode==2) request.forward("indore.html");
-else if(cityCode==3) request.forward("dewas.html");
-else request.forward("index.html");
-}
-*/
-void getCityView(Request &request,Response &response)
-{
-//int cityCode=atoi(request.get("cityCode").c_str());
-//request.setInt("code",cityCode);
-request.add("name","Ashish soni");
-request.forward("getCityViewByCode");
-}
-
-void getCityViewByCode(Request &request,Response &response)
-{
-int code=atoi(request.get("cityCode").c_str());
-string name=request.get("name");
-cout<<"Request Parameter [name] has value: "<<name<<endl;
-if(code==1) request.forward("ujjain.html");
-else if(code==2) request.forward("indore.html");
-else if(code==3) request.forward("dewas.html");
-else request.forward("index.html");
+fclose(file);
 }
 
 int main(void)
 {
-LinuxTCPServer webServer(7171);
+LinuxTCPServer webServer(7172);
 webServer.error404(send404);
 webServer.onRequest("/",indexPage);
-webServer.onRequest("/now",getDispatchTime);
-webServer.onRequest("/getCity",getCityView);
-webServer.onRequest("/getCityViewByCode",getCityViewByCode);
+webServer.onRequest("/getmarksheet",getMarksheet);
+webServer.onRequest("/marksheet.sct",getMarksheetForm);
 webServer.start();
 return 0;
 }
