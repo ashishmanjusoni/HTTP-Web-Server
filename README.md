@@ -61,9 +61,9 @@ sends back the basic HTTP Response.
 
 ## Compilation
 
-Please go through the script file `server/src/compile_files.sh`
+Please go through the script file `server/src/compile_files.sh` and make changes according to your working directory
 
 ## Run Server
 
-Please go through the script file `app/run_server.sh`
+Please go through the script file `app/run_server.sh` and make changes according to your working directory
 
