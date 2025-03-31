@@ -24,7 +24,7 @@ sends back the basic HTTP Response.
 * HTML
 
 ## Project Directory
-
+* **/single** : http server can handle only one request at a time (single thread)
 * **common/include** : contains header files of the utilities
 
         * mime_type
