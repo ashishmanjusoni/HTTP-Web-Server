@@ -11,14 +11,14 @@ class Response
 private:
 int clientSocketDescriptor;
 bool is_closed;
-map<string,string> parameters;
+map<string,string> template_literals;
 public:
 Response(int);
 Response(const Response &)=delete;
 Response & operator=(const Response &)=delete;
 ~Response();
-void addParameters(string,string);
-string getParameters(string);
+void addTemplate(string,string);
+string getTemplate(string);
 void write(string);
 void write(const char *);
 void _close();

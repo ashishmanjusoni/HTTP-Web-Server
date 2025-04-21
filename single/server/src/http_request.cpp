@@ -25,17 +25,6 @@ Request::~Request()
 {
 }
 
-void Request::setInt(string key,int value)
-{
-this->int_map.insert(pair<string,int>(key,value));
-}
-
-int Request::getInt(string key)
-{
-map<string,int>::iterator itr=this->int_map.find(key);
-return itr->second;
-}
-
 void Request::setPort(int port)
 {
 this->port=port;
@@ -84,17 +73,21 @@ char Request::getClientSideResource()
 return this->clientSideResource;
 }
 
-void Request::add(string key,string value)
+void Request::addParameter(string key,string value)
 {
 if(key.empty() || value.empty()) return;
-this->inputData.insert(pair<string,string>(key,value));
+this->parameters.insert(pair<string,string>(key,value));
 }
-string Request::get(string key)
+string Request::getParameter(string key)
 {
-if(key.empty() || this->inputData.empty()) return string("");
-map<string,string>::iterator itr=this->inputData.find(key);
-if(itr==this->inputData.end()) return string("");
+if(key.empty() || this->parameters.empty()) return string("");
+map<string,string>::iterator itr=this->parameters.find(key);
+if(itr==this->parameters.end()) return string("");
 return itr->second;
+}
+map<string,string> Request::getRequestParameters()
+{
+return this->parameters;
 }
 
 void Request::parseGETResource(const char *resource)
@@ -127,7 +120,7 @@ while(*e && *e!='&')
 value.push_back(*e);
 e++;
 }
-this->add(key,value);
+this->addParameter(key,value);
 key.clear();
 value.clear();
 if(!*e) break;
@@ -163,11 +156,11 @@ request.setClientSideResource(isClientSideResource(request.resource.c_str()));
 return request;
 }
 
-bool Request::containsKey(string key)
+bool Request::containsParameter(string key)
 {
-if(key.empty() || this->inputData.empty()) return false;
-map<string,string>::iterator itr=this->inputData.find(key);
-if(itr==this->inputData.end()) return false;
+if(key.empty() || this->parameters.empty()) return false;
+map<string,string>::iterator itr=this->parameters.find(key);
+if(itr==this->parameters.end()) return false;
 return true;
 }
 

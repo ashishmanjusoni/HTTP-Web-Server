@@ -20,16 +20,14 @@ string mimeType; // text/html, plain/text
 string method; // GET,POST,PUT,DELETE,HEAD,OPTIONS,PATCH,CONNECT,TRACE
 string resource; // starts from '/' /api , /pqr.css, /
 char clientSideResource;
-map<string,string> inputData; 
-map<string,int> int_map;
+map<string,string> parameters;
+ 
 string forwardTo;
 void parseGETResource(const char *);
 public:
 Request();
 Request & operator=(const Request &)=delete;
 ~Request();
-void setInt(string,int);
-int getInt(string);
 
 /* 
 It is same port on which the server is in listen mode 
@@ -70,15 +68,16 @@ If request requires to execute the client side resource ( read HTML file and sen
 */
 void setClientSideResource(char);
 char getClientSideResource();
-bool containsKey(string key);
+bool containsParameter(string key);
 /* 
 add input data into the specified data structure which was arrived in request
 */
-void add(string key,string value);
+void addParameter(string key,string value);
 /* 
 get input data value from data structure which was arrived in request 
 */
-string get(string key);
+string getParameter(string key);
+map<string,string> getRequestParameters();
 /* 
 Parse request to fetch resource details and query parameters and
 also decides weather the request wants to execute the client side resource or server side resource 

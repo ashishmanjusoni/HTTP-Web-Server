@@ -102,16 +102,14 @@ else request.forward("index.html");
 */
 void getCityView(Request &request,Response &response)
 {
-//int cityCode=atoi(request.get("cityCode").c_str());
-//request.setInt("code",cityCode);
-request.add("name","Ashish soni");
+request.addParameter("name","Ashish soni");
 request.forward("getCityViewByCode");
 }
 
 void getCityViewByCode(Request &request,Response &response)
 {
-int code=atoi(request.get("cityCode").c_str());
-string name=request.get("name");
+int code=atoi(request.getParameter("cityCode").c_str());
+string name=request.getParameter("name");
 cout<<"Request Parameter [name] has value: "<<name<<endl;
 if(code==1) request.forward("ujjain.html");
 else if(code==2) request.forward("indore.html");

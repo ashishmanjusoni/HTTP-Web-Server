@@ -92,34 +92,41 @@ void getMarksheet(Request &request,Response &response)
 {
 struct marks m;
 FILE *file;
+char found;
 file=fopen("marks.data","rb");
-int rollnumber=atoi(request.get("rollnumber").c_str());
+int rollnumber=atoi(request.getParameter("rollnumber").c_str());
+found=0;
 while(1)
 {
 fread(&m,sizeof(m),1,file);
 if(feof(file)) break;
 if(m.rollnumber==rollnumber)
 {
-request.setInt("hindi",m.hindi);
-request.setInt("english",m.english);
-request.setInt("physics",m.physics);
-request.setInt("chemistry",m.chemistry);
-request.setInt("maths",m.maths);
+request.addParameter("hindi",to_string(m.hindi));
+request.addParameter("english",to_string(m.english));
+request.addParameter("physics",to_string(m.physics));
+request.addParameter("chemistry",to_string(m.chemistry));
+request.addParameter("maths",to_string(m.maths));
 request.forward("marksheet.sct");
+found=1;
 break;
 }
 }
+if(!found)
+{
+
+}
 fclose(file);
 }
-
+/*
 void getMarksheetForm(Request &request,Response &response)
 {
 char tmp[11];
-int h=request.getInt("hindi");
-int e=request.getInt("english");
-int p=request.getInt("physics");
-int c=request.getInt("chemistry");
-int m=request.getInt("maths");
+int h=request.getParameter("hindi");
+int e=request.getParameter("english");
+int p=request.getParameter("physics");
+int c=request.getParameter("chemistry");
+int m=request.getParameter("maths");
 FILE *file;
 char g;
 string str;
@@ -130,11 +137,11 @@ fseek(file,0,SEEK_SET);
 response.write("HTTP/1.1 200 OK\nContent-Type: ");
 response.write(MIMEType::TEXT_HTML);
 response.write("\n\n");
-response.addParameters("hindi",to_string(h));
-response.addParameters("english",to_string(e));
-response.addParameters("physics",to_string(p));
-response.addParameters("chemistry",to_string(c));
-response.addParameters("maths",to_string(m));
+response.addTemplate("hindi",to_string(h));
+response.addTemplate("english",to_string(e));
+response.addTemplate("physics",to_string(p));
+response.addTemplate("chemistry",to_string(c));
+response.addTemplate("maths",to_string(m));
 while(1)
 {
 g=fgetc(file);
@@ -154,14 +161,14 @@ str.clear();
 response._close();
 fclose(file);
 }
-
+*/
 int main(void)
 {
 LinuxTCPServer webServer(7172);
 webServer.error404(send404);
 webServer.onRequest("/",indexPage);
 webServer.onRequest("/getmarksheet",getMarksheet);
-webServer.onRequest("/marksheet.sct",getMarksheetForm);
+//webServer.onRequest("/marksheet.sct",getMarksheetForm);
 webServer.start();
 return 0;
 }

@@ -4,10 +4,13 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<unistd.h>
+
+#include<utils>
 #include<http_request>
 #include<http_response>
+#include<expression_parser>
 #include<http_linux_tcp_server>
-#include<utils>
+
 using namespace std;
 using namespace wss;
 LinuxTCPServer::LinuxTCPServer(int port)
@@ -46,15 +49,24 @@ void LinuxTCPServer::readClientSideResource(Request &request,Response &response)
 {
 FILE *file;
 int size;
+const char *e;
 char responseBuffer[1025];
+ExpressionParser *expressionParser;
 string resource=request.getResource();
 string mimeType=MIMEType::getMIMEType(resource);
-const char *e=resource.c_str();
-if(*e=='/') e++;
-file=fopen(e,"rb");
+resource.erase(0,1);
+expressionParser=NULL;
+const char *f=resource.c_str();
+e=f+strlen(f);
+e--;
+while(e>f && *e!='.') e--;
+if(e>f) if(strcmp(e,".sct")==0) expressionParser=new ExpressionParser;
+file=fopen(resource.c_str(),"rb");
 if(!file)
 {
-cout<<"File not found "<<resource<<endl;
+string error;
+error.append(resource).append(" not found");
+request.addParameter("error",error);
 sendNotFound(request,response);
 return;
 }
@@ -66,26 +78,28 @@ response.write("HTTP/1.1 200 OK\n");
 response.write("Content-Type: ");
 response.write(mimeType);
 response.write("\n\n");
+map<string,string> requestParameters=request.getRequestParameters();
 while(1)
 {
 if(size<1024)
 {
 fread(responseBuffer,size,1,file);
 responseBuffer[size]='\0';
-response.write(responseBuffer);
+if(expressionParser) response.write(expressionParser->parse(responseBuffer,&requestParameters,true));
+else response.write(responseBuffer);
 break;
 }
 else
 {
 fread(responseBuffer,1024,1,file);
 responseBuffer[1024]='\0';
-response.write(responseBuffer);
+if(expressionParser) response.write(expressionParser->parse(responseBuffer,&requestParameters,false));
+else response.write(responseBuffer);
 }
 size-=1024;
 }
 response._close();
 fclose(file);
-cout<<"Read Client Side Resource"<<endl;
 }
 
 void LinuxTCPServer::start()

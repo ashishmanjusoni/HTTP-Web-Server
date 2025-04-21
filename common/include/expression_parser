@@ -1,0 +1,21 @@
+#ifndef __$__EXPRESSION_PARSER__2025_
+#define __$__EXPRESSION_PARSER__2025_
+#include<map>
+#include<iostream>
+using namespace std;
+namespace wss
+{
+class ExpressionParser
+{
+private:
+int symbol;
+string expression;
+string content;
+public:
+ExpressionParser();
+ExpressionParser(const ExpressionParser &)=delete;
+ExpressionParser & operator=(const ExpressionParser &)=delete;
+string parse(const char *,map<string,string> *,bool);
+};
+}
+#endif
