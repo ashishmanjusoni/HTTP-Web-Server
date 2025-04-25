@@ -55,9 +55,10 @@ sends back the basic HTTP Response.
 ## Project Description
 
 * The `server/include/http_linux_tcp_server.h` and `server/src/http_linux_tcp_server.cpp` will hold the actual implementation of the server via `LinuxTCPServer` class. 
-* `app/myapp.cpp` will have `main` function through which we will instance of the using `LinuxTCPServer server(8181);` and start the server using the function `server.start()`
+* `app/myapp.cpp` will have the entry point function from where onc can instanciate the server through a constructor call `LinuxTCPServer server(8181)` and start the server using the function `server.start()` on the instanciated object. At this point the server will be started and ready to listen the  request on port 8181
 * Through `server.onRequest(string,void(*)(Request &,Response &)` one can provide one or many server side resource
-* To foward request to another resource on same http server call `request.forward()` function and in argument give name of the resoruce without '/' character at the beginning.
+* To foward request to another resource on same http server then call `request.forward()` function and in argument give name of the resoruce without '/' character at the beginning. 
+* Through `forward` function call one can also forward the input parameter, for that one has to invoke the `addParameter(key,value)` and on another side call `getParameter(key)` to get parameter value.
 
 ## Compilation
 
