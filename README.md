@@ -51,14 +51,18 @@ sends back the basic HTTP Response.
         * http_request.cpp
         * http_response.cpp
 
-
 ## Project Description
 
 * The `server/include/http_linux_tcp_server.h` and `server/src/http_linux_tcp_server.cpp` will hold the actual implementation of the server via `LinuxTCPServer` class. 
-* `app/myapp.cpp` will have the entry point function from where onc can instanciate the server through a constructor call `LinuxTCPServer server(8181)` and start the server using the function `server.start()` on the instanciated object. At this point the server will be started and ready to listen the  request on port 8181
-* Through `server.onRequest(string,void(*)(Request &,Response &)` one can provide one or many server side resource
+
+## How to use
+
+* `app/myapp.cpp` will have the entry point function from where one can instantiate the server through a constructor call `LinuxTCPServer server(8181)` and start the server using the function `server.start()` on the instantiated object. At this point the server will be started and ready to listen the  request on port 8181. The port is any number available on the running operating system.
+* Please note the server will validate the availability of the port only when start the server using `server.start()` function. If port is already in use then server will not be start.
+* Through `server.onRequest(string,void(*)(Request &,Response &)` one can provide one or many server side resource. The server resource function should have two parameter `Request &` and `Response &` and should have return type `void`.
 * To foward request to another resource on same http server then call `request.forward()` function and in argument give name of the resoruce without '/' character at the beginning. 
-* Through `forward` function call one can also forward the input parameter, for that one has to invoke the `addParameter(key,value)` and on another side call `getParameter(key)` to get parameter value.
+* Through `request.forward()` function call one can also forward the input parameter, for that one has to invoke the `request.addParameter(key,value)` and on another side call `request.getParameter(key)` to get parameter value.
+* Write response to client, invoke `response.write("{content}")`, pass the content followed by response header which follow the TCP protocols.
 
 ## Compilation
 
