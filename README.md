@@ -65,8 +65,8 @@ sends back the basic HTTP Response. In this project we also provide support for 
 * To foward request to another resource on same http server then call `request.forward()` function and in argument give name of the resoruce without '/' character at the beginning. 
 * Through `request.forward()` function call one can also forward the input parameter, for that one has to invoke the `request.addParameter(key,value)` and on another side call `request.getParameter(key)` to get parameter value.
 * Write response to client, invoke `response.write("{content}")`, pass the content followed by response header which follow the TCP protocols.
-* To register the template into your server invoke `register_template_files(LinuxTCPServer *)`, which takes address of an object of type LinuxTCPServe.  This method will register all the template files (.sct.cpp) into your server. These template file should be kept in the same directory where entry
-  point function is written.
+* To register the template into your server you need to invoke `register_template_files(LinuxTCPServer *)` which is declared in `tpl.h` header file, which takes address of an object of type `LinuxTCPServer`. This method will register all the template files (.sct.cpp) into your server. These template file should be kept in the same directory where entry point function is written.
+* `tpl.h` will also gets generated along with other template files.
 
 ## Compilation
 
