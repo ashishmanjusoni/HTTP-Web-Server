@@ -16,7 +16,7 @@ The response sent by the HTTP server may also include data from files (for examp
 ## About Project
 
 This is mini project which shows one of the ways in which the HTTP servers are implemented. It uses TCP socket to listen the incomming request and 
-sends back the basic HTTP Response.
+sends back the basic HTTP Response. In this project we also provide support for the template file. We have support for only the template file which have `.sct` extention.
 
 ## Programming Languages
 * C
@@ -24,6 +24,7 @@ sends back the basic HTTP Response.
 * HTML
 
 ## Project Directory
+* **/tool** : contains only one file `tpl2c.c` template source code generator which take template and creates appropriate `.cpp` file.
 * **/single** : http server can handle only one request at a time (single thread)
 * **common/include** : contains header files of the utilities
 
@@ -57,12 +58,15 @@ sends back the basic HTTP Response.
 
 ## How to use
 
-* `app/myapp.cpp` will have the entry point function from where one can instantiate the server through a constructor call `LinuxTCPServer server(8181)` and start the server using the function `server.start()` on the instantiated object. At this point the server will be started and ready to listen the  request on port 8181. The port is any number available on the running operating system.
+* Instantiate the server through a constructor call `LinuxTCPServer server(8181)` and start the server using the function `server.start()` on the instantiated object. At this point the server will be started and ready to listen the  request on port 8181. The port is any number available on the running operating system.
 * Please note the server will validate the availability of the port only when start the server using `server.start()` function. If port is already in use then server will not be start.
 * Through `server.onRequest(string,void(*)(Request &,Response &)` one can provide one or many server side resource. The server resource function should have two parameter `Request &` and `Response &` and should have return type `void`.
+	`void (function_name)(Request &request,Response &response)`
 * To foward request to another resource on same http server then call `request.forward()` function and in argument give name of the resoruce without '/' character at the beginning. 
 * Through `request.forward()` function call one can also forward the input parameter, for that one has to invoke the `request.addParameter(key,value)` and on another side call `request.getParameter(key)` to get parameter value.
 * Write response to client, invoke `response.write("{content}")`, pass the content followed by response header which follow the TCP protocols.
+* To register the template into your server invoke `register_template_files(LinuxTCPServer *)`, which takes address of an object of type LinuxTCPServe.  This method will register all the template files (.sct.cpp) into your server. These template file should be kept in the same directory where entry
+  point function is written.
 
 ## Compilation
 
