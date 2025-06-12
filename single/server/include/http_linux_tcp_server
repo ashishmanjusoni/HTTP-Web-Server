@@ -41,22 +41,11 @@ LinuxTCPServer & operator=(const LinuxTCPServer &)=delete;
 LinuxTCPServer(const LinuxTCPServer &&)=delete;
 ~LinuxTCPServer();
 
-// Set custom 404 html page as a resource
-void error404(void (*)(Request &,Response &));
-
-// set custom 500 html page as a resource
-void error500(void (*)(Request &,Response &));
-
 /*
 Through this function, one can add the server side resources
 The resource which needs to execute on the server. The server resource means let's say you want to read some data from file/database and send back to client.
 */
 void onRequest(string,void (*)(Request &,Response &));
-
-/*
-If the requested resource is not found then send the not found response to the client
-*/
-void sendNotFound(Request &, Response &);
 
 /*
 Create a socket with domain TCP and port number. Once the socket has been create successfully a socket description id has been generated and provided 

@@ -30,8 +30,6 @@ const char *e;
 e=resource+strlen(resource)-1;
 while(e>=resource && *e!='.') e--;
 if(e<=resource) return 'N';
-return 'Y';
-/*
 e++;
 string str;
 while(*e)
@@ -41,5 +39,4 @@ e++;
 }
 if(MIMEType::contains(str)) return 'Y';
 return 'N';
-*/
 }

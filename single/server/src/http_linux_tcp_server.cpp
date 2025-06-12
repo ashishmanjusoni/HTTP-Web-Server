@@ -4,70 +4,51 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<unistd.h>
-
 #include<utils>
 #include<http_request>
 #include<http_response>
-#include<expression_parser>
 #include<http_linux_tcp_server>
+#include<stdlib.h>
 
 using namespace std;
 using namespace wss;
+
 LinuxTCPServer::LinuxTCPServer(int port)
 {
 this->port=port;
 }
+
 LinuxTCPServer::~LinuxTCPServer()
 {
 }
 
-void LinuxTCPServer::error404(void (*_error404)(Request &,Response &))
-{
-if(!_error404) return;
-this->error_config.insert(pair<int,void(*)(Request &,Response &)>(404,_error404));
-}
-void LinuxTCPServer::error500(void (*_error500)(Request &,Response &))
-{
-if(!_error500) return;
-this->error_config.insert(pair<int,void(*)(Request &,Response &)>(500,_error500));
-}
 void LinuxTCPServer::onRequest(string resource,void (*p2p)(Request &,Response &))
 {
 config.insert(pair<string,void (*)(Request &,Response&)>(resource,p2p));
-}
-void LinuxTCPServer::sendNotFound(Request &request, Response &response)
-{
-map<int,void(*)(Request &,Response &)>::iterator itr=this->error_config.find(404);
-if(itr!=this->error_config.end()) 
-{
-void (*_error404)(Request &,Response &)=itr->second;
-_error404(request,response);
-}
 }
 
 void LinuxTCPServer::readClientSideResource(Request &request,Response &response)
 {
 FILE *file;
 int size;
-const char *e;
 char responseBuffer[1025];
-ExpressionParser *expressionParser;
 string resource=request.getResource();
 string mimeType=MIMEType::getMIMEType(resource);
 resource.erase(0,1);
-expressionParser=NULL;
-const char *f=resource.c_str();
-e=f+strlen(f);
-e--;
-while(e>f && *e!='.') e--;
-if(e>f) if(strcmp(e,".sct")==0) expressionParser=new ExpressionParser;
 file=fopen(resource.c_str(),"rb");
 if(!file)
 {
 string error;
 error.append(resource).append(" not found");
 request.addParameter("error",error);
-sendNotFound(request,response);
+response.write("HTTP/1.1 404 NOT_FOUND\n");
+response.write("Content-Type: ");
+response.write(mimeType);
+response.write("\n\n");
+response.write("<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'>"); 
+response.write("<title>404 Page Not Found</title></head><body><h1 style='color:Red;'>NOT FOUND 404</h1><h1 style='color:Red;'>");
+response.write(error);
+response.write("</h1></body></html>");
 return;
 }
 fseek(file,0,SEEK_SET);
@@ -85,16 +66,14 @@ if(size<1024)
 {
 fread(responseBuffer,size,1,file);
 responseBuffer[size]='\0';
-if(expressionParser) response.write(expressionParser->parse(responseBuffer,&requestParameters,true));
-else response.write(responseBuffer);
+response.write(responseBuffer);
 break;
 }
 else
 {
 fread(responseBuffer,1024,1,file);
 responseBuffer[1024]='\0';
-if(expressionParser) response.write(expressionParser->parse(responseBuffer,&requestParameters,false));
-else response.write(responseBuffer);
+response.write(responseBuffer);
 }
 size-=1024;
 }
@@ -167,8 +146,10 @@ else
 map<string,void (*)(Request &,Response &)>::iterator itr=this->config.find(request.getResource());
 if(itr==config.end())
 {
+cout<<request.getResource()<<" not found"<<endl;
 cout<<"Resource not found: send 404 html"<<endl;
-sendNotFound(request,response);
+request.addParameter("error","The resource is not found");
+request.forward("error_page.sct");
 break;
 }
 else
@@ -176,9 +157,11 @@ else
 cout<<"Server Side resource"<<endl;
 void (*_resource)(Request &,Response&);
 _resource=itr->second;
+cout<<"call resource "<<request.getResource()<<endl;
 _resource(request,response);
 if(!request.getRequestForwardTo().empty())
 {
+cout<<"forward request "<<request.getRequestForwardTo()<<endl;
 request.setResource(request.getRequestForwardTo());
 continue;
 }
