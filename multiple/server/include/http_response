@@ -1,0 +1,27 @@
+#ifndef __$__RESPONSE__2024_
+#define __$__RESPONSE__2024_
+#include<map>
+#include<iostream>
+#include<forward_list>
+using namespace std;
+namespace wss
+{
+class Response
+{
+private:
+int clientSocketDescriptor;
+bool is_closed;
+map<string,string> template_literals;
+public:
+Response(int);
+Response(const Response &)=delete;
+Response & operator=(const Response &)=delete;
+~Response();
+void addTemplate(string,string);
+string getTemplate(string);
+void write(string);
+void write(const char *);
+void _close();
+};
+}
+#endif

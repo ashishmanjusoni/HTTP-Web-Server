@@ -1,0 +1,70 @@
+#ifndef __$__HTTP_LINUX_TCP_SERVER__2025_
+#define __$__HTTP_LINUX_TCP_SERVER__2025_
+
+#include<map>
+#include<queue>
+#include<thread>
+#include<iostream>
+#include<http_request>
+#include<http_response>
+using namespace std;
+namespace wss
+{
+/*
+The LinuxTCPServer class will be a layer of abstraction for all of our server code. You can create an instance through the constructor call
+	LinuxTCPServer(int port)
+After the instance initialization we can start the server through method `start()` this will create a socket with TCP/IP domain and port number. Once 
+the socket has been create successfully a socket description id has been generated and provided to us. This socket description will use in further 
+processing. Further, we will put the socket on listen mode and put the server on wait mode to accept the request from client.
+*/
+
+class LinuxTCPServer
+{
+private:
+/* Data structure for maintaining worker thread and completed thread */
+map<int,thread*> thread_pool;
+queue<int> completed_requests;
+/* Provide unique id to every request */
+int id;
+int shutdown;
+/* Data structure for maintaining request mapping functions */
+map<string,void (*)(Request &,Response &)> config;
+map<int,void (*)(Request &,Response &)> error_config;
+int port;
+char isClientSideResource(const char *);
+pair<string,map<string,string>> parseResource(const char *);
+Request parseRequest(const char *);
+void readClientSideResource(Request &,Response &);
+public:
+/* process client reqeust in separate thread */
+void processClientRequest(int,int,Request);
+/* Release the completed threads */
+void release_thread_after();
+void processShutdownTCPServerRequest();
+// Provide port number on which the server is on listen mode and ready to accept the request
+LinuxTCPServer(int);
+
+// No one can invoke copy constructor
+LinuxTCPServer(const LinuxTCPServer &)=delete;
+
+// No one can invoke operator=
+LinuxTCPServer & operator=(const LinuxTCPServer &)=delete;
+
+// No one can invoke Move constructor
+LinuxTCPServer(const LinuxTCPServer &&)=delete;
+~LinuxTCPServer();
+
+/*
+Through this function, one can add the server side resources
+The resource which needs to execute on the server. The server resource means let's say you want to read some data from file/database and send back to client.
+*/
+void onRequest(string,void (*)(Request &,Response &));
+
+/*
+Create a socket with domain TCP and port number. Once the socket has been create successfully a socket description id has been generated and provided 
+to us. This socket description will use in further processing. Further, we will put the socket on listen mode and put the server on wait mode to accept the request from client. Once the request is accepted it will create another socket named as client socket which further has a descriptor number. Throguth this client socket description we will process the request and send response to the client after that we will close this client socket descriptor.If the server is about to shutdown, the socket will get also closed.
+*/
+void start();
+};
+}
+#endif
